@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_device>
+  <exe>$TOOLKIT_DIR$\config\flashloader\AICSemi\FlashAIC8800MBW.out</exe>
+  <page>256</page>
+  <block>512 0x1000</block>
+  <flash_base>0x08000000</flash_base>
+  <online>1</online>
+  <aggregate>1</aggregate>
+</flash_device>

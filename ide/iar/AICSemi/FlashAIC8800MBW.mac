@@ -1,0 +1,25 @@
+execUserFlashInit()
+{
+    __message"----- execUserFlashInit -----";
+}
+
+execUserFlashReset()
+{
+    __message"----- execUserFlashReset -----";
+}
+
+execUserCoreConnect()
+{
+    /* __message"----- execUserCoreConnect -----"; */
+    __writeMemory32(0x00000020, 0x4050013C, "Memory");
+}
+
+execUserPreload()
+{
+    /* __message"----- execUserPreload -----"; */
+}
+
+execUserPreReset()
+{
+    /* __message"----- execUserPreReset -----"; */
+}
