@@ -82,6 +82,7 @@ void gpio_force_pull_up_enable(int gpidx)
         iomux_gpio_config_pull_up_setf(gpidx, 1);
         iomux_gpio_config_pull_frc_setf(gpidx, 1);
     } else if (gpidx < 32) {
+        gpidx -= 16;
         iomux_agpio_config_pull_dn_setf(gpidx, 0);
         iomux_agpio_config_pull_up_setf(gpidx, 1);
         iomux_agpio_config_pull_frc_setf(gpidx, 1);
@@ -95,6 +96,7 @@ void gpio_force_pull_dn_enable(int gpidx)
         iomux_gpio_config_pull_dn_setf(gpidx, 1);
         iomux_gpio_config_pull_frc_setf(gpidx, 1);
     } else if (gpidx < 32) {
+        gpidx -= 16;
         iomux_agpio_config_pull_up_setf(gpidx, 0);
         iomux_agpio_config_pull_dn_setf(gpidx, 1);
         iomux_agpio_config_pull_frc_setf(gpidx, 1);
@@ -108,6 +110,7 @@ void gpio_force_pull_none_enable(int gpidx)
         iomux_gpio_config_pull_up_setf(gpidx, 0);
         iomux_gpio_config_pull_frc_setf(gpidx, 1);
     } else if (gpidx < 32) {
+        gpidx -= 16;
         iomux_agpio_config_pull_dn_setf(gpidx, 0);
         iomux_agpio_config_pull_up_setf(gpidx, 0);
         iomux_agpio_config_pull_frc_setf(gpidx, 1);
@@ -121,6 +124,7 @@ void gpio_force_pull_up_dn_disable(int gpidx)
         iomux_gpio_config_pull_dn_setf(gpidx, 0);
         iomux_gpio_config_pull_frc_setf(gpidx, 0);
     } else if (gpidx < 32) {
+        gpidx -= 16;
         iomux_agpio_config_pull_up_setf(gpidx, 0);
         iomux_agpio_config_pull_dn_setf(gpidx, 0);
         iomux_agpio_config_pull_frc_setf(gpidx, 0);
