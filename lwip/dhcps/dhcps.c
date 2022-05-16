@@ -45,7 +45,7 @@
 #include "lwip/udp.h"
 #include "lwip/ip.h"
 #include "netif/etharp.h"
-#include "prot/dhcp.h"
+#include "lwip/prot/dhcp.h"
 #include "flash_api.h"
 #include "mac.h"
 #include "fhost_cntrl.h"

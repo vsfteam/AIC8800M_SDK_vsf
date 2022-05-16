@@ -15,7 +15,7 @@
  ****************************************************************************************
  */
 #include "net_def.h"
-#include "tcpip.h"
+#include "lwip/tcpip.h"
 #include "lwip/etharp.h"
 #include "lwip/netifapi.h"
 #include "lwip/sockets.h"

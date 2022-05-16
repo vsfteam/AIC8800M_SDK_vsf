@@ -17,7 +17,7 @@
  * INCLUDE FILES
  ****************************************************************************************
  */
-#include "tcpip.h"
+#include "lwip/tcpip.h"
 
 /*
  * DEFINITIONS

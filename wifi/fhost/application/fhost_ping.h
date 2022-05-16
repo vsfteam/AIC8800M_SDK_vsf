@@ -24,7 +24,7 @@
  * INCLUDE FILES
  ****************************************************************************************
  */
-#include "sockets.h"
+#include "lwip/sockets.h"
 #include "fhost_tg.h"
 
 /*

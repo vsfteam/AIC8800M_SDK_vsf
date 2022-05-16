@@ -30,7 +30,7 @@
 #include "net_iperf_al.h"
 #include "co_endian.h"
 #include "time_api.h"
-#include "etharp.h"
+#include "lwip/etharp.h"
 
 #if PLF_IPERF
 
