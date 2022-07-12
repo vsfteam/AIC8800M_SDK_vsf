@@ -82,6 +82,14 @@ void gpadc_diff_free(int gpbdiffch);
 int gpadc_diff_read(int gpbdiffch, int negflag);
 
 /**
+ * @brief       Read voltage from gpadc diff chan in high accuracy mode
+ * @param[in]   Gpadc diff chan index
+ * @param[in]   Negtive flag for diff chan, 0: (p - n), 1: (n - p)
+ * @return      Voltage value, range: -1175.00 ~ 1175.00mV
+ */
+int gpadc_diff_read_ham(int gpbdiffch, int negflag);
+
+/**
  * @brief       Measure voltage/temperature
  * @param[in]   GPADC type
  * @return      Voltage/temperature value (mV/ C)

@@ -191,6 +191,71 @@ int gpadc_diff_read(int gpbdiffch, int negflag)
     return volt_mv;
 }
 
+/* high accuracy mode */
+int gpadc_diff_read_ham(int gpbdiffch, int negflag)
+{
+    int volt_mv_0 = 0, volt_mv_1 = 0;
+    if (gpbdiffch < GPADC_DIFF_CH_NUM) {
+        unsigned int mux_bit = 7 - gpbdiffch;
+        unsigned int rdata_0, rdata_1;
+        #if PLF_PMIC_VER_LITE
+        PMIC_MEM_MASK_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_ana_ctrl0),
+            (AIC1000LITE_MSADC_CFG_ANA_MSADC_TEST_MODE |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_IBIAS_BIT(0x2) |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_CHOP_EN | AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_DEM_EN(0x3) | AIC1000LITE_MSADC_CFG_ANA_MSADC_ADC_FF_EN),
+            (AIC1000LITE_MSADC_CFG_ANA_MSADC_TS_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_TEST_MODE |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_IBIAS_BIT(0x7) |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_CHOP_EN | AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_DEM_EN(0x3) | AIC1000LITE_MSADC_CFG_ANA_MSADC_ADC_FF_EN));
+        PMIC_MEM_MASK_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_sw_ctrl1),
+            (AIC1000LITE_MSADC_CFG_MSADC_SW_MUX_BITS(mux_bit) |AIC1000LITE_MSADC_CFG_MSADC_WINDOW(0xFC0) |
+             AIC1000LITE_MSADC_CFG_MSADC_SW_DIFF_MODE),
+            (AIC1000LITE_MSADC_CFG_MSADC_SW_MUX_BITS(0xF) | AIC1000LITE_MSADC_CFG_MSADC_WINDOW(0xFFF)|
+             AIC1000LITE_MSADC_CFG_MSADC_SW_DIFF_MODE));
+        PMIC_MEM_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_sw_ctrl0),
+            AIC1000LITE_MSADC_CFG_MSADC_SW_START_PULSE);
+        while(PMIC_MEM_READ((unsigned int)(&aic1000liteMsadc->cfg_msadc_int_raw)) != 0x1);
+        PMIC_MEM_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_int_raw), 0x1);
+        rdata_0  = PMIC_MEM_READ((unsigned int)(&aic1000liteMsadc->cfg_msadc_ro_acc));
+        PMIC_MEM_MASK_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_ana_ctrl0),
+            (AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_IBIAS_BIT(0x2) |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_CHOP_EN | AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_DEM_EN(0x3) | AIC1000LITE_MSADC_CFG_ANA_MSADC_ADC_FF_EN),
+            (AIC1000LITE_MSADC_CFG_ANA_MSADC_TS_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_TEST_MODE |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000LITE_MSADC_CFG_ANA_MSADC_IBIAS_BIT(0x7) |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_CHOP_EN | AIC1000LITE_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+             AIC1000LITE_MSADC_CFG_ANA_MSADC_DEM_EN(0x3) | AIC1000LITE_MSADC_CFG_ANA_MSADC_ADC_FF_EN));
+        PMIC_MEM_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_sw_ctrl0),
+            AIC1000LITE_MSADC_CFG_MSADC_SW_START_PULSE);
+        while(PMIC_MEM_READ((unsigned int)(&aic1000liteMsadc->cfg_msadc_int_raw)) != 0x1);
+        PMIC_MEM_WRITE((unsigned int)(&aic1000liteMsadc->cfg_msadc_int_raw), 0x1);
+        rdata_1  = PMIC_MEM_READ((unsigned int)(&aic1000liteMsadc->cfg_msadc_ro_acc));
+        #endif
+        #if PLF_PMIC_VER_AUD
+        PMIC_MEM_MASK_WRITE((unsigned int)(&aic1000audMsadc->cfg_msadc_ana_ctrl0),
+            (AIC1000AUD_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000AUD_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+            AIC1000AUD_MSADC_CFG_ANA_MSADC_ADC_FF_EN),
+            (AIC1000AUD_MSADC_CFG_ANA_MSADC_TS_MODE |
+            AIC1000AUD_MSADC_CFG_ANA_MSADC_SDM_MODE | AIC1000AUD_MSADC_CFG_ANA_MSADC_SDM_GAIN_BIT |
+            AIC1000AUD_MSADC_CFG_ANA_MSADC_ADC_FF_EN));
+        PMIC_MEM_MASK_WRITE((unsigned int)(&aic1000audMsadc->cfg_msadc_sw_ctrl1),
+            (AIC1000AUD_MSADC_CFG_MSADC_SW_MUX_BITS(mux_bit) | AIC1000AUD_MSADC_CFG_MSADC_WINDOW(0xFC0) |
+             AIC1000AUD_MSADC_CFG_MSADC_SW_DIFF_MODE),
+            (AIC1000AUD_MSADC_CFG_MSADC_SW_MUX_BITS(0xF) | AIC1000AUD_MSADC_CFG_MSADC_WINDOW(0xFFF) |
+             AIC1000AUD_MSADC_CFG_MSADC_SW_DIFF_MODE));
+        PMIC_MEM_WRITE((unsigned int)(&aic1000audMsadc->cfg_msadc_sw_ctrl0),
+            AIC1000AUD_MSADC_CFG_MSADC_SW_START_PULSE);
+        while(PMIC_MEM_READ((unsigned int)(&aic1000audMsadc->cfg_msadc_int_raw)) != 0x1);
+        PMIC_MEM_WRITE((unsigned int)(&aic1000audMsadc->cfg_msadc_int_raw), 0x1);
+        rdata  = PMIC_MEM_READ((unsigned int)(&aic1000audMsadc->cfg_msadc_ro_acc));
+        #endif
+        volt_mv_0 = ((int64_t)rdata_0 * 117500 / 2033136 - 117500) * (negflag ? -1 : 1);
+        volt_mv_1 = ((int64_t)rdata_1 * 117500 / 2033136 - 117500) * (negflag ? -1 : 1);
+    }
+    return (volt_mv_1 - volt_mv_0);
+}
+
 int gpadc_measure(int type)
 {
     int ret = 0;
