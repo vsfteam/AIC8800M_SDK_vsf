@@ -269,6 +269,10 @@ typedef enum {
     REQ_BLK   = 1,
     REQ_TRSC  = 2,
     REQ_LLIST = 3,
+    REQ_TBL0  = 0,
+    REQ_TBL1  = 1,
+    REQ_TBL2  = 2,
+    REQ_LLI   = 3,
 } DMA_REQ_MODE_ENUM;
 
 typedef enum {
