@@ -37,6 +37,9 @@
 #include "rtos.h"
 #include "fhost_rx_def.h"
 
+#if defined(LWIP_TIMEVAL_PRIVATE) && !LWIP_TIMEVAL_PRIVATE
+#   include <time.h>
+#endif
 
 uint16_t fhost_ip_chksum(const void *dataptr, int len);
 
