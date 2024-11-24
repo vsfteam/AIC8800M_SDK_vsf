@@ -68,9 +68,15 @@ uint16_t fhost_ip_chksum(const void *dataptr, int len);
 
 #define IP_REASS_MAX_PBUFS            (FHOST_RX_BUF_CNT - 2)
 
+#ifndef MEMP_NUM_NETBUF
 #define MEMP_NUM_NETBUF               32
+#endif
+#ifndef MEMP_NUM_NETCONN
 #define MEMP_NUM_NETCONN              10
+#endif
+#ifndef MEMP_NUM_UDP_PCB
 #define MEMP_NUM_UDP_PCB              16
+#endif
 #define MEMP_NUM_REASSDATA            LWIP_MIN((IP_REASS_MAX_PBUFS), 5)
 
 #if NX_TXDESC_CNT0 > NX_TXDESC_CNT1
