@@ -1942,6 +1942,30 @@ mdns_resp_remove_netif(struct netif *netif)
   return ERR_OK;
 }
 
+err_t mdns_resp_rename_netif(struct netif *netif, const char *hostname)
+{
+  struct mdns_host* mdns;
+
+  LWIP_ERROR("mdns_resp_add_netif: netif != NULL", (netif != NULL), return ERR_VAL);
+  LWIP_ERROR("mdns_resp_add_netif: Hostname too long", (strlen(hostname) <= MDNS_LABEL_MAXLEN), return ERR_VAL);
+
+  LWIP_ASSERT("mdns_resp_add_service: netif != NULL", netif);
+  mdns = NETIF_TO_HOST(netif);
+  LWIP_ERROR("mdns_resp_add_service: Not an mdns netif", (mdns != NULL), return ERR_VAL);
+
+  memset(&mdns->name, 0, MDNS_LABEL_MAXLEN);
+  MEMCPY(&mdns->name, hostname, LWIP_MIN(MDNS_LABEL_MAXLEN, strlen(hostname)));
+
+  /* Announce on IPv6 and IPv4 */
+#if LWIP_IPV6
+  mdns_announce(netif, IP6_ADDR_ANY);
+#endif
+#if LWIP_IPV4
+  mdns_announce(netif, IP4_ADDR_ANY);
+#endif
+  return ERR_OK;
+}
+
 /**
  * @ingroup mdns
  * Add a service to the selected network interface.
@@ -2004,6 +2028,26 @@ mdns_resp_add_service(struct netif *netif, const char *name, const char *service
   mdns_announce(netif, IP4_ADDR_ANY);
 #endif
 
+  return ERR_OK;
+}
+
+err_t mdns_resp_del_service(struct netif *netif, u8_t slot)
+{
+  struct mdns_host* mdns;
+
+  LWIP_ASSERT("mdns_resp_add_service: netif != NULL", netif);
+  mdns = NETIF_TO_HOST(netif);
+  LWIP_ERROR("mdns_resp_add_service: Not an mdns netif", (mdns != NULL), return ERR_VAL);
+
+  mdns->services[slot] = NULL;
+
+  /* Announce on IPv6 and IPv4 */
+#if LWIP_IPV6
+  mdns_announce(netif, IP6_ADDR_ANY);
+#endif
+#if LWIP_IPV4
+  mdns_announce(netif, IP4_ADDR_ANY);
+#endif
   return ERR_OK;
 }
 
